@@ -1,7 +1,7 @@
 export class ScriptInfo {
     constructor(
-        public Id: number,
-        public Name: string
+        public id: number,
+        public name: string
     ) {
     };
 }

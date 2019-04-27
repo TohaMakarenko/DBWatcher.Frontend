@@ -1,8 +1,8 @@
 export class NavElement {
     constructor(
-        public Name: string,
-        public RouterLink: any[],
-        public Children?: NavElement[],
+        public name: string,
+        public routerLink: any[],
+        public children?: NavElement[],
     ) {
     };
 }

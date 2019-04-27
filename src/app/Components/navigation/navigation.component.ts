@@ -17,7 +17,7 @@ import {ScriptInfo} from "../../Models/scriptInfo";
 export class NavigationComponent {
 
     public Directories: Folder[];
-    public TreeControl = new NestedTreeControl<NavElement>(node => node.Children);
+    public TreeControl = new NestedTreeControl<NavElement>(node => node.children);
     public TreeSource = new MatTreeNestedDataSource<NavElement>();
 
     isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
@@ -37,22 +37,23 @@ export class NavigationComponent {
         this.foldersService.getFolders()
             .subscribe(directories => {
                 this.TreeSource.data.push(
-                    new NavElement("Scripts",
+                    new NavElement("scripts",
                         ["scripts"],
-                        directories.map(x => this.mapDirectoryToNavElement(x))))
+                        directories.map(x => this.mapDirectoryToNavElement(x))));
+                this.TreeSource.data = this.TreeSource.data;
             });
     };
 
     mapDirectoryToNavElement(dir: Folder): NavElement {
-        return new NavElement(dir.Name,
-            ["scripts/dir", dir.Name],
-            dir.Scripts.map(s => this.mapScriptToNavElement(s))
+        return new NavElement(dir.name,
+            ["scripts/dir", dir.name],
+            dir.scripts.map(s => this.mapScriptToNavElement(s))
         )
     }
 
     mapScriptToNavElement(script: ScriptInfo): NavElement {
-        return new NavElement(script.Name, ["scripts", script.Id]);
+        return new NavElement(script.name, ["scripts", script.id]);
     }
 
-    hasChild = (_: number, node: NavElement) => !!node.Children && node.Children.length > 0;
+    hasChild = (_: number, node: NavElement) => !!node.children && node.children.length > 0;
 }

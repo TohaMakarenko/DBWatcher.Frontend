@@ -8,6 +8,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NavigationComponent} from './Components/navigation/navigation.component';
 import {LayoutModule} from '@angular/cdk/layout';
 import {MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule, MatTreeModule} from '@angular/material';
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
     declarations: [
@@ -24,7 +25,8 @@ import {MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatL
         MatSidenavModule,
         MatIconModule,
         MatListModule,
-        MatTreeModule
+        MatTreeModule,
+        HttpClientModule
     ],
     providers: [],
     bootstrap: [AppComponent]

@@ -2,8 +2,8 @@ import {ScriptInfo} from "./scriptInfo";
 
 export class Folder {
     constructor(
-        public Id: number,
-        public Name: string,
-        public Scripts: ScriptInfo[]) {
+        public id: number,
+        public name: string,
+        public scripts: ScriptInfo[]) {
     };
 }
