@@ -5,7 +5,7 @@
         [opened]="!(isHandset$ | async)">
         <mat-toolbar>Menu</mat-toolbar>
         <mat-nav-list>
-            <mat-tree [dataSource]="TreeSource" [treeControl]="TreeControl" class="example-tree">
+            <mat-tree [dataSource]="treeSource" [treeControl]="treeControl" class="example-tree">
                 <!-- This is the tree node template for leaf nodes -->
                 <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
                     <li class="mat-tree-node">
@@ -21,12 +21,12 @@
                             <button mat-icon-button matTreeNodeToggle
                                 [attr.aria-label]="'toggle ' + node.name">
                                 <mat-icon class="mat-icon-rtl-mirror">
-                                    {{TreeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                                    {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
                                 </mat-icon>
                             </button>
                             <a [routerLink]="node.routerLink">{{node.name}}</a>
                         </div>
-                        <ul [class.example-tree-invisible]="!TreeControl.isExpanded(node)">
+                        <ul [class.example-tree-invisible]="!treeControl.isExpanded(node)">
                             <ng-container matTreeNodeOutlet></ng-container>
                         </ul>
                     </li>
