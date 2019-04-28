@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
@@ -14,7 +14,7 @@ import {ScriptInfo} from "../../Models/scriptInfo";
     templateUrl: './navigation.component.html',
     styleUrls: ['./navigation.component.scss']
 })
-export class NavigationComponent {
+export class NavigationComponent implements OnInit {
 
     public treeControl = new NestedTreeControl<NavElement>(node => node.children);
     public treeSource = new MatTreeNestedDataSource<NavElement>();
@@ -35,21 +35,21 @@ export class NavigationComponent {
     async getDirectories() {
         let directories = await this.foldersService.getFolders();
         this.treeSource.data.push(
-            new NavElement("scripts",
-                ["scripts"],
+            new NavElement('scripts',
+                ['scripts'],
                 directories.map(x => this.mapDirectoryToNavElement(x))));
         this.treeSource.data = this.treeSource.data;
     };
 
     mapDirectoryToNavElement(dir: Folder): NavElement {
         return new NavElement(dir.name,
-            ["scripts/dir", dir.name],
+            ['scripts/dir', dir.name],
             dir.scripts.map(s => this.mapScriptToNavElement(s))
         )
     }
 
     mapScriptToNavElement(script: ScriptInfo): NavElement {
-        return new NavElement(script.name, ["scripts", script.id]);
+        return new NavElement(script.name, ['scripts', script.id]);
     }
 
     hasChild = (_: number, node: NavElement) => !!node.children && node.children.length > 0;
