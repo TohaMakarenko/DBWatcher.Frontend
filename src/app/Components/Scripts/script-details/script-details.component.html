@@ -1,1 +1,17 @@
-<ngx-monaco-editor [options]="editorOptions" [(ngModel)]="sql"></ngx-monaco-editor>
+<form #scriptForm="ngForm">
+    <div class="page-header">
+        <mat-form-field>
+            <input placeholder="Name" matInput [(ngModel)]="script.name" required name="name">
+        </mat-form-field>
+        <div class="buttons-right">
+            <button type="submit" mat-raised-button color="primary">Save</button>
+            <button type="button" mat-raised-button color="accent">Execute</button>
+            <button type="button" mat-raised-button color="warn">Delete</button>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+    <mat-form-field class="description-textarea">
+        <textarea matInput [(ngModel)]="script.description" placeholder="Description" name="description"></textarea>
+    </mat-form-field>
+    <ngx-monaco-editor class="sql-editor" [options]="editorOptions" [(ngModel)]="script.body" name="body"></ngx-monaco-editor>
+</form>

@@ -1,10 +1,7 @@
-export class Script {
-    constructor(
-        public id: number,
-        public name: string,
-        public description: string,
-        public author: string,
-        public body: string
-    ) {
-    }
+export interface Script {
+    id: number;
+    name: string;
+    description: string;
+    author: string;
+    body: string;
 }

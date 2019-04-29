@@ -1,9 +1,7 @@
 import {ScriptInfo} from "./scriptInfo";
 
-export class Folder {
-    constructor(
-        public id: number,
-        public name: string,
-        public scripts: ScriptInfo[]) {
-    };
+export interface Folder {
+    id: number;
+    name: string;
+    scripts: ScriptInfo[];
 }

@@ -12,8 +12,13 @@ import {ActivatedRoute} from "@angular/router";
 export class ScriptDetailsComponent implements OnInit {
     @ViewChild('editor') editor;
 
-    public script: Script;
-    public sql: string;
+    public script: Script = {
+        id: -1,
+        name: '',
+        author: '',
+        description: '',
+        body: ''
+    };
     editorOptions = {theme: 'vs-light', language: 'sql'};
 
     constructor(
@@ -30,8 +35,12 @@ export class ScriptDetailsComponent implements OnInit {
     }
 
     private async getScript(id: number) {
-        this.script = await this.scriptService.getScript(id);
-        this.sql = this.script.body;
+        this.script = await this.scriptService.getScript(id).toPromise();
     }
 
+}
+
+interface SOS {
+    a: string,
+    b: number
 }
