@@ -1,9 +1,15 @@
-<form #scriptForm="ngForm">
+<form #scriptForm="ngForm" (ngSubmit)="onSubmit()">
     <div class="page-header">
         <mat-form-field>
             <input placeholder="Name" matInput [(ngModel)]="script.name" required name="name">
         </mat-form-field>
         <div class="buttons-right">
+            <!--<mat-progress-spinner
+                id="load-spinner"
+                color="primary"
+                mode="indeterminate"
+                diameter="20">
+            </mat-progress-spinner>-->
             <button type="submit" mat-raised-button color="primary">Save</button>
             <button type="button" mat-raised-button color="accent">Execute</button>
             <button type="button" mat-raised-button color="warn">Delete</button>

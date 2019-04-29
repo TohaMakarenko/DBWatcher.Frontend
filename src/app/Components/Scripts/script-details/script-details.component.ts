@@ -34,13 +34,12 @@ export class ScriptDetailsComponent implements OnInit {
         });
     }
 
+    public async onSubmit() {
+        this.script = await this.scriptService.saveScript(this.script).toPromise();
+    }
+
     private async getScript(id: number) {
         this.script = await this.scriptService.getScript(id).toPromise();
     }
 
-}
-
-interface SOS {
-    a: string,
-    b: number
 }

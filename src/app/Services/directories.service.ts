@@ -1,18 +1,17 @@
 import {Injectable} from '@angular/core';
 import {Folder} from "../Models/folder";
-import {HttpClient} from "@angular/common/http";
-import {AppSettings} from "../../app-settings";
 import {Observable} from "rxjs";
+import {ApiService} from "./api.service";
 
 @Injectable({
     providedIn: 'root'
 })
 export class FoldersService {
 
-    controllerUrl: string = AppSettings.API_ENDPOINT + '/folders';
+    controllerUrl: string = '/folders';
 
     constructor(
-        private http: HttpClient,
+        private http: ApiService,
     ) {
     }
 

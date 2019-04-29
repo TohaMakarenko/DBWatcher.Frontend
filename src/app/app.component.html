@@ -45,8 +45,10 @@
             </mat-tree>
         </mat-nav-list>
     </mat-sidenav>
-    <!-- Add Content Here -->
-    <div class="page-container">
-        <router-outlet></router-outlet>
-    </div>
+    <mat-sidenav-content>
+        <!-- Add Content Here -->
+        <div class="page-container">
+            <router-outlet></router-outlet>
+        </div>
+    </mat-sidenav-content>
 </mat-sidenav-container>
