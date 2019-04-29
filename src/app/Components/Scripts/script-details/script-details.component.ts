@@ -34,6 +34,8 @@ export class ScriptDetailsComponent implements OnInit {
         });
     }
 
+    public onDelete;
+
     public async onSubmit() {
         this.script = await this.scriptService.saveScript(this.script).toPromise();
     }
