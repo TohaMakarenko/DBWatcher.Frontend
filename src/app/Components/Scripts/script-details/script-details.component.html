@@ -1,8 +1,7 @@
 <form #scriptForm="ngForm" (ngSubmit)="onSubmit()">
     <div class="page-header">
-        <mat-form-field>
-            <input placeholder="Name" matInput [(ngModel)]="script.name" required name="name">
-        </mat-form-field>
+        <label for="name"><b>Script </b></label>
+        <input id="name" pInputText placeholder="Name" [(ngModel)]="script.name" required name="name">
         <div class="buttons-right">
             <!--<mat-progress-spinner
                 id="load-spinner"
@@ -10,14 +9,15 @@
                 mode="indeterminate"
                 diameter="20">
             </mat-progress-spinner>-->
-            <button type="submit" mat-raised-button color="primary">Save</button>
-            <button type="button" mat-raised-button color="accent">Execute</button>
-            <button type="button" mat-raised-button color="warn">Delete</button>
+            <button pButton type="submit" label="Save"></button>
+            <button pButton type="button" label="Execute" class="ui-button-success"></button>
+            <button pButton type="button" label="Delete" class="ui-button-danger"></button>
         </div>
     </div>
-    <mat-divider></mat-divider>
-    <mat-form-field class="description-textarea">
-        <textarea matInput [(ngModel)]="script.description" placeholder="Description" name="description"></textarea>
-    </mat-form-field>
-    <ngx-monaco-editor class="sql-editor" [options]="editorOptions" [(ngModel)]="script.body" name="body"></ngx-monaco-editor>
+    <div class="page-content">
+        <h4>Description </h4>
+        <textarea pInputTextarea [(ngModel)]="script.description" placeholder="Description" name="description" class="script-description"></textarea>
+        <h4>Script text </h4>
+        <ngx-monaco-editor class="sql-editor" [options]="editorOptions" [(ngModel)]="script.body" name="body"></ngx-monaco-editor>
+    </div>
 </form>

@@ -2,12 +2,11 @@ import {Component} from '@angular/core';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {MatTreeNestedDataSource} from "@angular/material";
-import {NestedTreeControl} from "@angular/cdk/tree";
 import {ScriptInfo} from "./Models/scriptInfo";
 import {NavElement} from "./Models/nav-element";
 import {Folder} from "./Models/folder";
 import {FoldersService} from "./Services/directories.service";
+import {MenuItem} from "primeng/api";
 
 @Component({
     selector: 'app-root',
@@ -16,8 +15,7 @@ import {FoldersService} from "./Services/directories.service";
 })
 export class AppComponent {
 
-    public treeControl = new NestedTreeControl<NavElement>(node => node.children);
-    public treeSource = new MatTreeNestedDataSource<NavElement>();
+    menuItems: MenuItem[];
 
     isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
         .pipe(
@@ -34,27 +32,26 @@ export class AppComponent {
 
     async getFolders() {
         let directories = await this.foldersService.getFolders().toPromise();
-        this.treeSource.data.push(
-            {
-                name: 'scripts',
-                routerLink: ['scripts'],
-                children: directories.map(x => this.mapDirectoryToNavElement(x))
-            });
-        this.treeSource.data = this.treeSource.data;
+        this.menuItems = [{
+            label: "Scripts",
+            items: directories.map(x => this.mapDirectoryToNavElement(x))
+        }];
     };
 
-    mapDirectoryToNavElement(dir: Folder): NavElement {
+    mapDirectoryToNavElement(dir: Folder): MenuItem {
         return {
-            name: dir.name,
-            routerLink: ['scripts/dir', dir.name],
-            children: dir.scripts.map(s => this.mapScriptToNavElement(s))
+            label: dir.name,
+            //routerLink: ['scripts/dir', dir.name],
+            items: dir.scripts.map(s => this.mapScriptToNavElement(s)),
+            icon: 'pi pi-fw pi-folder'
         };
     }
 
-    mapScriptToNavElement(script: ScriptInfo): NavElement {
+    mapScriptToNavElement(script: ScriptInfo): MenuItem {
         return {
-            name: script.name,
-            routerLink: ['scripts', script.id]
+            label: script.name,
+            routerLink: ['scripts', script.id],
+            icon: 'pi pi-fw pi-file'
         }
     }
 
