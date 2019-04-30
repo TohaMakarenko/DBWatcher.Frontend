@@ -21,3 +21,17 @@
 <div id="content">
     <router-outlet></router-outlet>
 </div>
+
+
+<p-dialog header="New folder" [(visible)]="displayNewFolderDialog" [modal]="true" [responsive]="true" [style]="{width: '350px', minWidth: '200px'}"
+          [minY]="70"
+          [maximizable]="false" [baseZIndex]="10000">
+    <p>
+        <label for="newFolderName"><b>Name </b></label>
+        <input id="newFolderName" pInputText placeholder="Name" [(ngModel)]="newFolderName" required>
+    </p>
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" (click)="createFolder()" label="Create"></button>
+        <button type="button" pButton icon="pi pi-close" (click)="displayNewFolderDialog=false" label="Cancel" class="ui-button-secondary"></button>
+    </p-footer>
+</p-dialog>

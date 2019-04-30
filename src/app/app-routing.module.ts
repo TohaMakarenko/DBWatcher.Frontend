@@ -7,6 +7,7 @@ import {ScriptsListComponent} from "./Components/Scripts/scripts-list/scripts-li
 const routes: Routes = [
     {path: '', redirectTo: '/scripts', pathMatch: 'full'},
     {path: 'scripts/:id', component: ScriptDetailsComponent},
+    {path: 'scripts/new', component: ScriptDetailsComponent},
     {path: 'scripts', component: ScriptsListComponent},
 ];
 

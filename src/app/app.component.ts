@@ -1,11 +1,9 @@
 import {Component} from '@angular/core';
-import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {BreakpointObserver} from '@angular/cdk/layout';
+import {Subscription} from 'rxjs';
 import {ScriptInfo} from "./Models/scriptInfo";
-import {NavElement} from "./Models/nav-element";
 import {Folder} from "./Models/folder";
-import {FoldersService} from "./Services/directories.service";
+import {FoldersService} from "./Services/folders.service";
 import {MenuItem} from "primeng/api";
 
 @Component({
@@ -15,34 +13,37 @@ import {MenuItem} from "primeng/api";
 })
 export class AppComponent {
 
-    menuItems: MenuItem[];
-
-    isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
-        .pipe(
-            map(result => result.matches)
-        );
+    menuItems: MenuItem[] = [];
+    displayNewFolderDialog: boolean;
+    newFolderName: string;
+    subscription: Subscription;
 
     constructor(private breakpointObserver: BreakpointObserver,
                 private foldersService: FoldersService) {
+        this.subscription = this.foldersService.getSubject().subscribe(this.updateMenuItems.bind(this));
     }
 
     ngOnInit() {
-        this.getFolders();
+        this.loadFolders();
     }
 
-    async getFolders() {
-        let directories = await this.foldersService.getFolders().toPromise();
+    async loadFolders() {
+        this.foldersService.loadFolders();
+    };
+
+    updateMenuItems(folders: Folder[]) {
         this.menuItems = [{
             label: "Scripts",
-            items: directories.map(x => this.mapDirectoryToNavElement(x))
+            items: folders.map(x => this.mapDirectoryToNavElement(x)).concat([this.getNewFolderMenuItem()]),
+            expanded: true
         }];
-    };
+    }
 
     mapDirectoryToNavElement(dir: Folder): MenuItem {
         return {
             label: dir.name,
             //routerLink: ['scripts/dir', dir.name],
-            items: dir.scripts.map(s => this.mapScriptToNavElement(s)),
+            items: dir.scripts.map(s => this.mapScriptToNavElement(s)).concat([this.getNewScriptMenuItem(dir.id)]),
             icon: 'pi pi-fw pi-folder'
         };
     }
@@ -55,5 +56,40 @@ export class AppComponent {
         }
     }
 
-    hasChild = (_: number, node: NavElement) => !!node.children && node.children.length > 0;
+    getNewScriptMenuItem(directoryId?: number): MenuItem {
+        let menuItem: MenuItem = {
+            label: "New script",
+            routerLink: ["scripts/new"],
+            icon: 'pi pi-fw pi-plus'
+        };
+        if (directoryId != null) {
+            menuItem.queryParams = {directoryId: directoryId}
+        }
+        return menuItem
+    }
+
+    getNewFolderMenuItem(directoryId?: number): MenuItem {
+        let menuItem: MenuItem = {
+            label: "New folder",
+            command: () => this.displayNewFolderDialog = true,
+            icon: 'pi pi-fw pi-plus'
+        };
+        if (directoryId != null) {
+            menuItem.queryParams = {directoryId: directoryId}
+        }
+        return menuItem
+    }
+
+    async createFolder() {
+        await this.foldersService.insertFolder({
+            id: 0,
+            name: this.newFolderName,
+            scripts: []
+        });
+        this.displayNewFolderDialog = false;
+    }
+
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
 }

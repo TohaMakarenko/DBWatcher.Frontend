@@ -12,13 +12,7 @@ import {ActivatedRoute} from "@angular/router";
 export class ScriptDetailsComponent implements OnInit {
     @ViewChild('editor') editor;
 
-    public script: Script = {
-        id: -1,
-        name: '',
-        author: '',
-        description: '',
-        body: ''
-    };
+    public script: Script = this.getNewScript();
     editorOptions = {theme: 'vs-light', language: 'sql'};
 
     constructor(
@@ -29,8 +23,12 @@ export class ScriptDetailsComponent implements OnInit {
 
     ngOnInit() {
         this.route.paramMap.subscribe(params => {
-            let id = +params.get('id');
-            this.getScript(id);
+            if (params.get('id') == "new") {
+                this.script = this.getNewScript();
+            } else {
+                let id = +params.get('id');
+                this.getScript(id);
+            }
         });
     }
 
@@ -44,4 +42,13 @@ export class ScriptDetailsComponent implements OnInit {
         this.script = await this.scriptService.getScript(id).toPromise();
     }
 
+    private getNewScript(): Script {
+        return {
+            id: -1,
+            name: '',
+            author: '',
+            description: '',
+            body: ''
+        };
+    }
 }
