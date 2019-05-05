@@ -6,7 +6,7 @@
 
     <div class="ui-sm-6 ui-md-4 ui-lg-3">
         <label class="label">Directory</label>
-        <p-dropdown></p-dropdown>
+        <p-dropdown [options]="foldersSelect" [(ngModel)]="selectedFolder"></p-dropdown>
     </div>
 
     <div class="buttons-right ui-sm-12 ui-md-4 ui-lg-6">

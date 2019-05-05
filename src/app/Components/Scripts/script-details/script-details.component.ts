@@ -4,6 +4,9 @@ import {ScriptService} from "../../../Services/script.service";
 import {Script} from "../../../Models/script";
 import {ActivatedRoute} from "@angular/router";
 import {Folder} from "../../../Models/folder";
+import {SelectItem} from "primeng/api";
+import {FoldersService} from "../../../Services/folders.service";
+import {Subscription} from "rxjs";
 
 @Component({
     selector: 'app-script-details',
@@ -13,38 +16,51 @@ import {Folder} from "../../../Models/folder";
 export class ScriptDetailsComponent implements OnInit {
     @ViewChild('editor') editor;
 
+    public foldersSelect: SelectItem[];
     public script: Script = this.getNewScript();
-    public folder: Folder;
+    public selectedFolder: number = -1;
+
     editorOptions = {theme: 'vs-light', language: 'sql'};
+    private foldersSubscription: Subscription;
 
     constructor(
         private route: ActivatedRoute,
         private location: Location,
-        private scriptService: ScriptService) {
+        private scriptService: ScriptService,
+        private foldersService: FoldersService) {
+        this.foldersSubscription = this.foldersService.getSubject().subscribe(this.updateSelectItems.bind(this));
     }
 
     ngOnInit() {
         this.route.paramMap.subscribe(params => {
             if (params.get('id') == "new") {
                 this.script = this.getNewScript();
+                this.selectedFolder = +params.get('directoryId');
             } else {
                 let id = +params.get('id');
                 this.getScript(id);
             }
         });
+        this.loadFolders();
     }
 
-    public onDelete;
+    async loadFolders() {
+        this.foldersService.loadFolders();
+    };
 
-    public async onSave() {
+    onDelete;
+
+    async onSave() {
         this.script = await this.scriptService.saveScript(this.script).toPromise();
+        if (this.selectedFolder > 0)
+            await this.foldersService.addScript(this.selectedFolder, this.script.id);
     }
 
-    private async getScript(id: number) {
+    async getScript(id: number) {
         this.script = await this.scriptService.getScript(id).toPromise();
     }
 
-    private getNewScript(): Script {
+    getNewScript(): Script {
         return {
             id: -1,
             name: '',
@@ -52,6 +68,14 @@ export class ScriptDetailsComponent implements OnInit {
             description: '',
             body: ''
         };
+    }
+
+    updateSelectItems(folders: Folder[]) {
+        this.foldersSelect = folders.map(f => ({
+            value: f.id,
+            label: f.name,
+            icon: "pi pi-folder"
+        }))
     }
 
     onNgDestroy() {

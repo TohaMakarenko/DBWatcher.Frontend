@@ -13,6 +13,7 @@ export class FoldersService {
 
     controllerUrl: string = '/folders';
     private folders: Folder[] = [];
+    private scripts: Script[] = [];
     private foldersSubject: BehaviorSubject<Folder[]>;
 
     constructor(
@@ -34,16 +35,13 @@ export class FoldersService {
             combineLatest(this.http.get<FolderDto[]>(this.controllerUrl),
                 this.scriptService.loadScripts(),
                 (folders: FolderDto[], scripts: Script[]) => ({folders, scripts})).subscribe(pair => {
+                this.scripts = pair.scripts;
                 let folders: Folder[] = [{
                     id: -1,
                     name: "All",
                     scripts: pair.scripts
                 }];
-                folders = folders.concat(pair.folders.map(f => ({
-                    id: f.id,
-                    name: f.name,
-                    scripts: pair.scripts.filter(s => f.scripts.includes(s.id))
-                })));
+                folders = folders.concat(pair.folders.map(f => this.mapFolder(f)));
                 this.foldersSubject.next(folders);
             });
         } else {
@@ -57,6 +55,32 @@ export class FoldersService {
         this.folders.push(newFolder);
         this.updateSubject();
         return newFolder;
+    }
+
+    async addScript(folderId: number, scriptId: number): Promise<Folder> {
+        let folder = await this.http.post<FolderDto>(`${this.controllerUrl}/${folderId}/addScript`, scriptId).toPromise();
+        this.loadFolders(); //todo use this.updateFolder(folderId, folder);
+        return folder;
+    }
+
+    async removeScript(folderId: number, scriptId: number): Promise<Folder> {
+        let folder = await this.http.post<FolderDto>(`${this.controllerUrl}/${folderId}/removeScript`, scriptId).toPromise();
+        this.loadFolders(); //todo use this.updateFolder(folderId, folder);
+        return folder;
+    }
+
+    private updateFolder(folderId: number, folder: FolderDto) {
+        let index = this.folders.findIndex(f => f.id == folderId);
+        this.folders[index] = this.mapFolder(folder);
+        this.updateSubject();
+    }
+
+    private mapFolder(folder: FolderDto): Folder {
+        return {
+            id: folder.id,
+            name: folder.name,
+            scripts: this.scripts.filter(s => folder.scripts.includes(s.id))
+        }
     }
 
     updateSubject() {

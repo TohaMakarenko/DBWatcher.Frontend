@@ -63,7 +63,7 @@ export class AppComponent {
             icon: 'pi pi-fw pi-plus'
         };
         if (directoryId != null) {
-            menuItem.queryParams = {directoryId: directoryId}
+            menuItem.routerLink.push({directoryId: directoryId});
         }
         return menuItem
     }
