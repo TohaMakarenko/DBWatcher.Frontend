@@ -1,8 +1,11 @@
+$sidenavSize: 250px;
+$toolbarSize: 45px;
+
 #toolbar {
     background-color: #20272a;
     box-sizing: border-box;
     display: block;
-    height: 55px;
+    height: $toolbarSize;
     position: fixed;
     top: 0;
     left: 0;
@@ -20,17 +23,17 @@
 #sidenav {
     position: fixed;
     left: 0;
-    top: 55px;
+    top: $toolbarSize;
     height: calc(100% - 55px);
     background-color: #fff;
     overflow-x: hidden;
     overflow-y: auto;
-    width: 300px;
+    width: $sidenavSize;
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, .3);
     z-index: 9995;
 }
 
 #content {
-    margin-left: 300px;
-    padding-top: 55px;
+    margin-left: $sidenavSize;
+    padding-top: $toolbarSize;
 }

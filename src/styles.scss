@@ -16,8 +16,7 @@ $page-left-padding: 30px;
 }
 
 .buttons-right {
-    display: inline-block;
-    float: right;
+    text-align: right;
 
     button {
         margin-right: 8px;
@@ -36,11 +35,20 @@ $page-left-padding: 30px;
 }
 
 .page-header {
-    padding: 10px 20px 10px $page-left-padding;
+    padding: 7px 20px 7px $page-left-padding;
     box-sizing: border-box;
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, .3);
 }
 
 .page-content {
     padding: 20px 20px 0 $page-left-padding;
+}
+
+
+.label {
+    margin-right: 8px;
+}
+
+.label-top {
+    display: block;
 }

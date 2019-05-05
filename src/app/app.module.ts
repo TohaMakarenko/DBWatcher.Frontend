@@ -28,6 +28,7 @@ import {
 import {ToastModule} from 'primeng/toast';
 import {ConfirmDialogModule} from 'primeng/components/confirmdialog/confirmdialog';
 import {PanelMenuModule} from 'primeng/panelmenu';
+import {DropdownModule} from 'primeng/dropdown';
 
 //region primeng
 
@@ -57,6 +58,7 @@ import {PanelMenuModule} from 'primeng/panelmenu';
         SidebarModule,
         ToolbarModule,
         PanelMenuModule,
+        DropdownModule,
 
         //endregion
 

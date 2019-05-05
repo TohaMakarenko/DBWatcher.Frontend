@@ -1,23 +1,29 @@
-<form #scriptForm="ngForm" (ngSubmit)="onSubmit()">
-    <div class="page-header">
-        <label for="name"><b>Script </b></label>
-        <input id="name" pInputText placeholder="Name" [(ngModel)]="script.name" required name="name">
-        <div class="buttons-right">
-            <!--<mat-progress-spinner
-                id="load-spinner"
-                color="primary"
-                mode="indeterminate"
-                diameter="20">
-            </mat-progress-spinner>-->
-            <button pButton type="submit" label="Save"></button>
-            <button pButton type="button" label="Execute" class="ui-button-success"></button>
-            <button pButton type="button" label="Delete" class="ui-button-danger"></button>
-        </div>
+<div class="page-header ui-g">
+    <div class="ui-sm-6 ui-md-4 ui-lg-3">
+        <label class="label">Script</label>
+        <input pInputText placeholder="Name" [(ngModel)]="script.name" required>
     </div>
-    <div class="page-content">
-        <h4>Description </h4>
-        <textarea pInputTextarea [(ngModel)]="script.description" placeholder="Description" name="description" class="script-description"></textarea>
-        <h4>Script text </h4>
-        <ngx-monaco-editor class="sql-editor" [options]="editorOptions" [(ngModel)]="script.body" name="body"></ngx-monaco-editor>
+
+    <div class="ui-sm-6 ui-md-4 ui-lg-3">
+        <label class="label">Directory</label>
+        <p-dropdown></p-dropdown>
     </div>
-</form>
+
+    <div class="buttons-right ui-sm-12 ui-md-4 ui-lg-6">
+        <!--<mat-progress-spinner
+            id="load-spinner"
+            color="primary"
+            mode="indeterminate"
+            diameter="20">
+        </mat-progress-spinner>-->
+        <button pButton label="Save" icon="pi pi-save" class="ui-button-secondary" (click)="onSave()"></button>
+        <button pButton label="Execute" icon="pi pi-cog" class="ui-button-secondary"></button>
+        <button pButton label="Delete" icon="pi pi-trash" class="ui-button-secondary"></button>
+    </div>
+</div>
+<div class="page-content">
+    <label class="label label-top">Description </label> <br>
+    <textarea pInputTextarea [(ngModel)]="script.description" placeholder="Description" name="description" class="script-description"></textarea><br>
+    <label class="label label-top">Script text </label> <br>
+    <ngx-monaco-editor class="sql-editor" [options]="editorOptions" [(ngModel)]="script.body" name="body"></ngx-monaco-editor>
+</div>

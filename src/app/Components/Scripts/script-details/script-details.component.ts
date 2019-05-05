@@ -3,6 +3,7 @@ import {Location} from '@angular/common';
 import {ScriptService} from "../../../Services/script.service";
 import {Script} from "../../../Models/script";
 import {ActivatedRoute} from "@angular/router";
+import {Folder} from "../../../Models/folder";
 
 @Component({
     selector: 'app-script-details',
@@ -13,6 +14,7 @@ export class ScriptDetailsComponent implements OnInit {
     @ViewChild('editor') editor;
 
     public script: Script = this.getNewScript();
+    public folder: Folder;
     editorOptions = {theme: 'vs-light', language: 'sql'};
 
     constructor(
@@ -34,7 +36,7 @@ export class ScriptDetailsComponent implements OnInit {
 
     public onDelete;
 
-    public async onSubmit() {
+    public async onSave() {
         this.script = await this.scriptService.saveScript(this.script).toPromise();
     }
 
@@ -50,5 +52,9 @@ export class ScriptDetailsComponent implements OnInit {
             description: '',
             body: ''
         };
+    }
+
+    onNgDestroy() {
+
     }
 }
