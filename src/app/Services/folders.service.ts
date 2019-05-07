@@ -57,6 +57,12 @@ export class FoldersService {
         return newFolder;
     }
 
+    async moveScriptToFolder(folderId: number, scriptId: number) {
+        let folder = await this.http.post<FolderDto>(`${this.controllerUrl}/${folderId}/moveScript`, scriptId).toPromise();
+        this.loadFolders(); //todo use this.updateFolder(folderId, folder);
+        return folder;
+    }
+
     async addScript(folderId: number, scriptId: number): Promise<Folder> {
         let folder = await this.http.post<FolderDto>(`${this.controllerUrl}/${folderId}/addScript`, scriptId).toPromise();
         this.loadFolders(); //todo use this.updateFolder(folderId, folder);
@@ -67,6 +73,10 @@ export class FoldersService {
         let folder = await this.http.post<FolderDto>(`${this.controllerUrl}/${folderId}/removeScript`, scriptId).toPromise();
         this.loadFolders(); //todo use this.updateFolder(folderId, folder);
         return folder;
+    }
+
+    getScriptFolder(scriptId: number): Folder {
+        return this.folders.sort((a, b) => b.id - a.id).find(f => f.scripts.some(s => s.id == scriptId));
     }
 
     private updateFolder(folderId: number, folder: FolderDto) {

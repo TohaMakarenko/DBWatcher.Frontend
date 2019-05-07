@@ -51,13 +51,14 @@ export class ScriptDetailsComponent implements OnInit {
     onDelete;
 
     async onSave() {
+        let selectedFolder = this.selectedFolder;
         this.script = await this.scriptService.saveScript(this.script).toPromise();
-        if (this.selectedFolder > 0)
-            await this.foldersService.addScript(this.selectedFolder, this.script.id);
+        await this.foldersService.moveScriptToFolder(selectedFolder, this.script.id);
     }
 
     async getScript(id: number) {
         this.script = await this.scriptService.getScript(id).toPromise();
+        this.updateSelectedFolder();
     }
 
     getNewScript(): Script {
@@ -75,7 +76,14 @@ export class ScriptDetailsComponent implements OnInit {
             value: f.id,
             label: f.name,
             icon: "pi pi-folder"
-        }))
+        }));
+        this.updateSelectedFolder();
+    }
+
+    updateSelectedFolder() {
+        if (this.script != null && this.script.id >= 0) {
+            this.selectedFolder = this.foldersService.getScriptFolder(this.script.id).id;
+        }
     }
 
     onNgDestroy() {
