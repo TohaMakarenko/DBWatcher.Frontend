@@ -4,14 +4,15 @@ import {ScriptService} from "../../../Services/script.service";
 import {Script} from "../../../Models/script";
 import {ActivatedRoute} from "@angular/router";
 import {Folder} from "../../../Models/folder";
-import {SelectItem} from "primeng/api";
+import {ConfirmationService, SelectItem} from "primeng/api";
 import {FoldersService} from "../../../Services/folders.service";
 import {Subscription} from "rxjs";
 
 @Component({
     selector: 'app-script-details',
     templateUrl: './script-details.component.html',
-    styleUrls: ['./script-details.component.scss']
+    styleUrls: ['./script-details.component.scss'],
+    providers: [ConfirmationService]
 })
 export class ScriptDetailsComponent implements OnInit {
     @ViewChild('editor') editor;
@@ -27,7 +28,8 @@ export class ScriptDetailsComponent implements OnInit {
         private route: ActivatedRoute,
         private location: Location,
         private scriptService: ScriptService,
-        private foldersService: FoldersService) {
+        private foldersService: FoldersService,
+        private confirmationService: ConfirmationService) {
         this.foldersSubscription = this.foldersService.getSubject().subscribe(this.updateSelectItems.bind(this));
     }
 
@@ -48,7 +50,20 @@ export class ScriptDetailsComponent implements OnInit {
         this.foldersService.loadFolders();
     };
 
-    onDelete;
+    onDelete() {
+        if (this.script != null && this.script.id >= 0)
+            this.confirmationService.confirm({
+                message: 'Are you sure that you want to delete script?',
+                header: 'Delete script',
+                icon: 'pi pi-exclamation-triangle',
+                accept: async () => {
+                    if (this.script != null && this.script.id >= 0)
+                        await this.scriptService.deleteScript(this.script.id);
+                },
+                reject: () => {
+                }
+            });
+    };
 
     async onSave() {
         let selectedFolder = this.selectedFolder;

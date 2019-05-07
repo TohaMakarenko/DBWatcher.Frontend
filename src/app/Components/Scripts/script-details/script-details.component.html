@@ -18,7 +18,7 @@
         </mat-progress-spinner>-->
         <button pButton label="Save" icon="pi pi-save" class="ui-button-secondary" (click)="onSave()"></button>
         <button pButton label="Execute" icon="pi pi-cog" class="ui-button-secondary"></button>
-        <button pButton label="Delete" icon="pi pi-trash" class="ui-button-secondary"></button>
+        <button pButton label="Delete" icon="pi pi-trash" class="ui-button-secondary" (click)="onDelete()"></button>
     </div>
 </div>
 <div class="page-content">
@@ -27,3 +27,5 @@
     <label class="label label-top">Script text </label> <br>
     <ngx-monaco-editor class="sql-editor" [options]="editorOptions" [(ngModel)]="script.body" name="body"></ngx-monaco-editor>
 </div>
+
+<p-confirmDialog></p-confirmDialog>

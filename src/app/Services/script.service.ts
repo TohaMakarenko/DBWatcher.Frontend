@@ -57,6 +57,12 @@ export class ScriptService {
         return observable;
     }
 
+    public async deleteScript(id: number) {
+        await this.http.delete(`${this.controllerUrl}/${id}`).subscribe(x => {
+            this.loadScripts();
+        });
+    }
+
     updateSubject() {
         this.scriptsSubject.next(this.scripts);
     }
