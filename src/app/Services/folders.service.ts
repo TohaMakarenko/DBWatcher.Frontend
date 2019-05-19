@@ -14,7 +14,7 @@ export class FoldersService {
     controllerUrl: string = '/folders';
     private folders: Folder[] = [];
     private scripts: Script[] = [];
-    private foldersSubject: BehaviorSubject<Folder[]>;
+    private readonly foldersSubject: BehaviorSubject<Folder[]>;
 
     constructor(
         private http: ApiService,

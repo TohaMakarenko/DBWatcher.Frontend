@@ -11,7 +11,7 @@ export class ScriptService {
 
     controllerUrl: string = '/scripts';
     private scripts: ScriptInfo[] = [];
-    private scriptsSubject: BehaviorSubject<ScriptInfo[]>;
+    private readonly scriptsSubject: BehaviorSubject<ScriptInfo[]>;
 
     constructor(private http: ApiService) {
         this.scriptsSubject = new BehaviorSubject<ScriptInfo[]>(this.scripts);

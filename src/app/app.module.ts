@@ -29,6 +29,7 @@ import {ToastModule} from 'primeng/toast';
 import {ConfirmDialogModule} from 'primeng/components/confirmdialog/confirmdialog';
 import {PanelMenuModule} from 'primeng/panelmenu';
 import {DropdownModule} from 'primeng/dropdown';
+import { ConnectionDetailsComponent } from './Components/Connections/connection-details/connection-details.component';
 
 //region primeng
 
@@ -39,6 +40,7 @@ import {DropdownModule} from 'primeng/dropdown';
         AppComponent,
         ScriptDetailsComponent,
         ScriptsListComponent,
+        ConnectionDetailsComponent,
     ],
     imports: [
         //region primeng

@@ -1,0 +1,33 @@
+<div class="page-header ui-g">
+    <div class="ui-sm-6 ui-md-6 ui-lg-6">
+        <label for="connection-name" class="label">Connection</label>
+        <input id="connection-name" pInputText placeholder="Name" [(ngModel)]="connection.name" required>
+    </div>
+
+    <div class="buttons-right ui-sm-12 ui-md-6 ui-lg-6">
+        <!--<mat-progress-spinner
+            id="load-spinner"
+            color="primary"
+            mode="indeterminate"
+            diameter="20">
+        </mat-progress-spinner>-->
+        <button pButton label="Save" icon="pi pi-save" class="ui-button-secondary" (click)="onSave()"></button>
+        <button pButton label="Delete" icon="pi pi-trash" class="ui-button-secondary" (click)="onDelete()"></button>
+    </div>
+</div>
+<div class="page-content">
+    <div>
+        <label for="connection-server" class="label label-top">Server</label>
+        <input id="connection-server" type="text" size="30" pInputText [(ngModel)]="connection.server">
+    </div>
+    <div>
+        <label for="connection-login" class="label label-top">Login</label>
+        <input id="connection-login" type="text" size="30" pInputText [(ngModel)]="connection.login">
+    </div>
+    <div>
+        <label for="connection-password" class="label label-top">Password</label>
+        <input id="connection-password" type="password" size="30" pInputText [(ngModel)]="connection.password">
+    </div>
+</div>
+
+<p-confirmDialog></p-confirmDialog>
