@@ -1,0 +1,57 @@
+<p-dialog header="Execute script"
+          [visible]="display"
+          (visibleChange)="changeDisplay($event)"
+          [modal]="true"
+          [responsive]="true"
+          [style]="{width: '700px', minWidth: '300px'}"
+          [maximizable]="true"
+          [baseZIndex]="10000">
+    <div class="ui-g" style="height: 300px">
+        <div class="ui-g-4">
+            <label class="label">Connection</label>
+            <p-dropdown [options]="connectionsSelect" [(ngModel)]="connection" (ngModelChange)="onConnectionChanged($event)"></p-dropdown>
+        </div>
+        <div class="ui-g-4">
+            <label class="label">Databases</label>
+            <p-dropdown [options]="databasesSelect" [(ngModel)]="database" (ngModelChange)="onScriptChanged($event)"></p-dropdown>
+        </div>
+        <div class="ui-g-4">
+            <label class="label">Script</label>
+            <p-dropdown [options]="scriptsSelect" [(ngModel)]="script"></p-dropdown>
+        </div>
+
+        <p-table [value]="parameters">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Value</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData>
+                <tr>
+                    <td>
+                        {{rowData.name}}
+                    </td>
+                    <td>
+                        {{getDbType(rowData.type)}}
+                    </td>
+                    <td pEditableColumn>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input type="text" [(ngModel)]="rowData.value">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{rowData.value}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" (click)="onExecuteClick()" label="Execute"></button>
+        <button type="button" pButton icon="pi pi-close" (click)="onCancelClick()" label="Cancel" class="ui-button-secondary"></button>
+    </p-footer>
+</p-dialog>

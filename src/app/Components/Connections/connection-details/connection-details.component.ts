@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ConnectionsServiceService} from "../../../Services/connections-service.service";
+import {ConnectionService} from "../../../Services/connection.service";
 import {ActivatedRoute} from "@angular/router";
 import {Location} from "@angular/common";
 import {Connection} from "../../../Models/connection";
@@ -19,7 +19,7 @@ export class ConnectionDetailsComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private location: Location,
-        private connectionsService: ConnectionsServiceService,
+        private connectionsService: ConnectionService,
         private confirmationService: ConfirmationService) {
     }
 

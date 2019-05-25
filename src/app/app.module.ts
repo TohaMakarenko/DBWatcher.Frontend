@@ -30,6 +30,8 @@ import {ConfirmDialogModule} from 'primeng/components/confirmdialog/confirmdialo
 import {PanelMenuModule} from 'primeng/panelmenu';
 import {DropdownModule} from 'primeng/dropdown';
 import { ConnectionDetailsComponent } from './Components/Connections/connection-details/connection-details.component';
+import { ExecuteDialogComponent } from './Components/Execution/execute-dialog/execute-dialog.component';
+import {TableModule} from "primeng/table";
 
 //region primeng
 
@@ -41,6 +43,7 @@ import { ConnectionDetailsComponent } from './Components/Connections/connection-
         ScriptDetailsComponent,
         ScriptsListComponent,
         ConnectionDetailsComponent,
+        ExecuteDialogComponent,
     ],
     imports: [
         //region primeng
@@ -72,7 +75,8 @@ import { ConnectionDetailsComponent } from './Components/Connections/connection-
         LayoutModule,
         HttpClientModule,
         MonacoEditorModule.forRoot(),
-        FormsModule
+        FormsModule,
+        TableModule
     ],
     providers: [],
     bootstrap: [AppComponent]

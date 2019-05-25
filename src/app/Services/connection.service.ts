@@ -7,7 +7,7 @@ import {Script} from "../Models/script";
 @Injectable({
     providedIn: 'root'
 })
-export class ConnectionsServiceService {
+export class ConnectionService {
     controllerUrl: string = '/ConnectionProperties';
 
     private connections: Connection[] = [];

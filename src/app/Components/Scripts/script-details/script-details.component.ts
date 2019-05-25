@@ -7,6 +7,7 @@ import {Folder} from "../../../Models/folder";
 import {ConfirmationService, SelectItem} from "primeng/api";
 import {FoldersService} from "../../../Services/folders.service";
 import {Subscription} from "rxjs";
+import {DbType} from "../../../Models/db-type.enum";
 
 @Component({
     selector: 'app-script-details',
@@ -20,6 +21,9 @@ export class ScriptDetailsComponent implements OnInit {
     public foldersSelect: SelectItem[];
     public script: Script = this.getNewScript();
     public selectedFolder: number = -1;
+    public typesSelect: SelectItem[];
+
+    displayExecutionDialog: boolean = false;
 
     editorOptions = {theme: 'vs-light', language: 'sql'};
     private foldersSubscription: Subscription;
@@ -31,6 +35,10 @@ export class ScriptDetailsComponent implements OnInit {
         private foldersService: FoldersService,
         private confirmationService: ConfirmationService) {
         this.foldersSubscription = this.foldersService.getSubject().subscribe(this.updateSelectItems.bind(this));
+        this.typesSelect = Object.keys(DbType).filter(x => isNaN(Number(x)) === false).map(x => ({
+            value: x,
+            label: DbType[x]
+        }))
     }
 
     ngOnInit() {
@@ -76,14 +84,33 @@ export class ScriptDetailsComponent implements OnInit {
         this.updateSelectedFolder();
     }
 
+    onAddParameter() {
+        if (!this.script.parameters)
+            this.script.parameters = [];
+        this.script.parameters.push({
+            name: "",
+            type: 0,
+            value: null
+        });
+    }
+
+    onRemoveParameter(rowData: any) {
+        this.script.parameters = this.script.parameters.filter(x => x.name != rowData.name);
+    }
+
     getNewScript(): Script {
         return {
             id: -1,
             name: '',
             author: '',
             description: '',
-            body: ''
+            body: '',
+            parameters: []
         };
+    }
+
+    getDbType(id: number): string {
+        return DbType[id];
     }
 
     updateSelectItems(folders: Folder[]) {
@@ -101,7 +128,11 @@ export class ScriptDetailsComponent implements OnInit {
         }
     }
 
-    onNgDestroy() {
+    onExecute() {
+        this.displayExecutionDialog = true;
+    }
 
+    onNgDestroy() {
+        this.foldersSubscription.unsubscribe();
     }
 }

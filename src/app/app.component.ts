@@ -5,7 +5,7 @@ import {ScriptInfo} from "./Models/scriptInfo";
 import {Folder} from "./Models/folder";
 import {FoldersService} from "./Services/folders.service";
 import {MenuItem} from "primeng/api";
-import {ConnectionsServiceService} from "./Services/connections-service.service";
+import {ConnectionService} from "./Services/connection.service";
 import {Connection} from "./Models/connection";
 
 @Component({
@@ -23,16 +23,16 @@ export class AppComponent {
 
     constructor(private breakpointObserver: BreakpointObserver,
                 private foldersService: FoldersService,
-                private connectionsService: ConnectionsServiceService) {
+                private connectionsService: ConnectionService) {
         this.scriptsSubscription = this.foldersService.getSubject().subscribe(this.updateScriptsMenuItems.bind(this));
         this.connectionsSubscription = this.connectionsService.getSubject().subscribe(this.updateConnectionsMenuItems.bind(this));
     }
 
     ngOnInit() {
-        this.loadFolders();
+        this.loadData();
     }
 
-    async loadFolders() {
+    async loadData() {
         this.foldersService.loadFolders();
         this.connectionsService.loadConnections();
     };
