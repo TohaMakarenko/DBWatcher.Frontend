@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpEvent, HttpHeaders, HttpParams, HttpRequest} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
-import {catchError, map} from 'rxjs/operators';
+import {catchError, map, share} from 'rxjs/operators';
 import {environment} from '../../environments/environment';
 import {AppSettings} from "../../app-settings";
 
@@ -17,7 +17,8 @@ export class ApiService {
         return this.http.get<T>(url, {params})
             .pipe(
                 map(this.extractData),
-                catchError(this.handleError));
+                catchError(this.handleError),
+                share());
     }
 
     getById<T>(path: string, id: any): Observable<any> {
@@ -25,14 +26,16 @@ export class ApiService {
         return this.http.get<T>(url)
             .pipe(
                 map(this.extractData),
-                catchError(this.handleError));
+                catchError(this.handleError),
+                share());
     }
 
     public put<T>(path: string, body: Object = {}): Observable<any> {
         const url = `${environment.server_url}${path}`;
         return this.http.put<T>(url, body, AppSettings.httpOptions)
             .pipe(
-                catchError(this.handleError)
+                catchError(this.handleError),
+                share()
             );
     }
 
@@ -40,7 +43,8 @@ export class ApiService {
         return this.http.post<T>(`${environment.server_url}${path}`, body, AppSettings.httpOptions)
             .pipe(
                 map(this.extractData),
-                catchError(this.handleError));
+                catchError(this.handleError),
+                share());
     }
 
     public uploadFile(path: string, file): Observable<HttpEvent<{}>> {
@@ -58,7 +62,8 @@ export class ApiService {
     public delete(path): Observable<any> {
         return this.http.delete(`${environment.server_url}${path}`, AppSettings.httpOptions)
             .pipe(
-                catchError(this.handleError)
+                catchError(this.handleError),
+                share()
             );
     }
 
