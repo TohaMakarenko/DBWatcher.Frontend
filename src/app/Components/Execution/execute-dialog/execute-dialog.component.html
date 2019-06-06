@@ -1,25 +1,25 @@
 <p-dialog header="Execute script"
-          [visible]="display"
-          (visibleChange)="changeDisplay($event)"
+          [(visible)]="display"
           [modal]="true"
           [responsive]="true"
-          [style]="{width: '700px', minWidth: '300px'}"
+          [style]="{width: '1000px', minWidth: '300px'}"
           [maximizable]="true"
           [baseZIndex]="10000">
-    <div class="ui-g" style="height: 300px">
+    <div class="ui-g" style="height: 600px;">
         <div class="ui-g-4">
             <label class="label">Connection</label>
-            <p-dropdown [options]="connectionsSelect" [(ngModel)]="connection" (ngModelChange)="onConnectionChanged($event)"></p-dropdown>
+            <p-dropdown [options]="connectionsSelect" [(ngModel)]="connection"></p-dropdown>
         </div>
         <div class="ui-g-4">
             <label class="label">Databases</label>
-            <p-dropdown [options]="databasesSelect" [(ngModel)]="database" (ngModelChange)="onScriptChanged($event)"></p-dropdown>
+            <p-dropdown [options]="databasesSelect" [(ngModel)]="database"></p-dropdown>
         </div>
         <div class="ui-g-4">
             <label class="label">Script</label>
             <p-dropdown [options]="scriptsSelect" [(ngModel)]="script"></p-dropdown>
         </div>
 
+        <h4 class="label label-top">Parameters </h4>
         <p-table [value]="parameters">
             <ng-template pTemplate="header">
                 <tr>
@@ -49,6 +49,12 @@
                 </tr>
             </ng-template>
         </p-table>
+
+        <h4 class="label label-top">Result </h4> <br>
+        <app-result [result]="result" *ngIf="isFinished" style="width: 100%"></app-result>
+        <div style="width: 100%">
+            <p-progressBar mode="indeterminate" *ngIf="isStarted && !isFinished"></p-progressBar>
+        </div>
     </div>
     <p-footer>
         <button type="button" pButton icon="pi pi-check" (click)="onExecuteClick()" label="Execute"></button>

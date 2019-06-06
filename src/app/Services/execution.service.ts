@@ -1,8 +1,11 @@
 import {Injectable} from '@angular/core';
-import {Execution} from "../Models/execution";
-import {BehaviorSubject} from "rxjs";
+import {ExecutionContext, ExecutionState} from "../Models/executionContext";
+import {BehaviorSubject, throwError} from "rxjs";
 import {ApiService} from "./api.service";
 import {Parameter} from "../Models/parameter";
+import {ScriptResult} from "../Models/script-result";
+import {catchError} from "rxjs/operators";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Injectable({
     providedIn: 'root'
@@ -11,37 +14,42 @@ export class ExecutionService {
 
     controllerUrl: string = '/Execution';
 
-    executions: Execution[] = [];
+    executions: ExecutionContext[] = [];
     lastId: number = 0;
-    executionsSubject: BehaviorSubject<Execution[]>;
+    executionsSubject: BehaviorSubject<ExecutionContext[]>;
 
     constructor(
         private http: ApiService
     ) {
-        this.executionsSubject = new BehaviorSubject<Execution[]>(this.executions);
+        this.executionsSubject = new BehaviorSubject<ExecutionContext[]>(this.executions);
     }
 
-    executeScript(connectionId: number, database: string, scriptId: number, params: Parameter[] = []): Execution {
-        let execution: Execution = {
+    executeScript(connectionId: number, database: string, scriptId: number, params: Parameter[] = []): ExecutionContext {
+        let execution: ExecutionContext = {
             id: this.getNextId(),
+            state: ExecutionState.started,
             execution: {
                 connectionId: connectionId,
                 database: database,
                 scriptId: scriptId,
                 params: params
             },
-            result: null
+            result: null,
+            observable: null
         };
-        this.executeScriptInternal(execution);
-        return execution;
-    }
 
-    private executeScriptInternal(execution: Execution) {
-        this.http.post(this.controllerUrl + '/Execute', execution.execution)
-            .subscribe(result => {
-                execution.result = result;
-                this.updateSubject();
-            })
+        execution.observable = this.http.post<ScriptResult>(this.controllerUrl + '/Execute', execution.execution)
+            .pipe(catchError((err: HttpErrorResponse) => {
+                execution.state = ExecutionState.failed;
+                return throwError(err);
+            }));
+
+        execution.observable.subscribe(result => {
+            execution.result = result;
+            execution.state = ExecutionState.finished;
+            this.updateSubject();
+        });
+        return execution;
     }
 
     private getNextId() {

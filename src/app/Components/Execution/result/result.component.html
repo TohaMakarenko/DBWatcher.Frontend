@@ -1,0 +1,30 @@
+<div *ngIf="result.isSuccess">
+    <div *ngFor="let table of tables">
+        <p-table [columns]="table.headers"
+                 [value]="table.values"
+                 [resizableColumns]="true"
+                 columnResizeMode="expand"
+                 [scrollable]="true"
+                 scrollHeight="500px">
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th *ngFor="let col of columns" pResizableColumn>
+                        {{col}}
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr>
+                    <td *ngFor="let col of columns">
+                        {{rowData[col]}}
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+<div *ngIf="!result.isSuccess" style="color: red;">
+    <span *ngFor="let err of errors">
+        {{err}}<br>
+    </span>
+</div>

@@ -18,7 +18,7 @@ import {
     GrowlModule,
     InputTextareaModule,
     InputTextModule,
-    PanelModule,
+    PanelModule, ProgressBarModule,
     ProgressSpinnerModule,
     RadioButtonModule,
     SidebarModule,
@@ -32,6 +32,7 @@ import {DropdownModule} from 'primeng/dropdown';
 import { ConnectionDetailsComponent } from './Components/Connections/connection-details/connection-details.component';
 import { ExecuteDialogComponent } from './Components/Execution/execute-dialog/execute-dialog.component';
 import {TableModule} from "primeng/table";
+import { ResultComponent } from './Components/Execution/result/result.component';
 
 //region primeng
 
@@ -44,6 +45,7 @@ import {TableModule} from "primeng/table";
         ScriptsListComponent,
         ConnectionDetailsComponent,
         ExecuteDialogComponent,
+        ResultComponent,
     ],
     imports: [
         //region primeng
@@ -76,7 +78,8 @@ import {TableModule} from "primeng/table";
         HttpClientModule,
         MonacoEditorModule.forRoot(),
         FormsModule,
-        TableModule
+        TableModule,
+        ProgressBarModule
     ],
     providers: [],
     bootstrap: [AppComponent]
