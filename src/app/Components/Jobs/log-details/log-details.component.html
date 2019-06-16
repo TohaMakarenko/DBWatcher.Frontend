@@ -1,0 +1,16 @@
+<p-dialog header="Execute script"
+          [(visible)]="display"
+          [modal]="true"
+          [responsive]="true"
+          [style]="{width: '1000px', minWidth: '300px'}"
+          [maximizable]="true"
+          [baseZIndex]="10000">
+    <div class="ui-g" style="height: 600px; display: block">
+
+        <h4 class="label label-top">Result </h4> <br>
+        <app-result [result]="log.result" style="width: 100%"></app-result>
+    </div>
+    <p-footer>
+        <button type="button" pButton icon="pi pi-close" (click)="onCancelClick()" label="Cancel" class="ui-button-secondary"></button>
+    </p-footer>
+</p-dialog>

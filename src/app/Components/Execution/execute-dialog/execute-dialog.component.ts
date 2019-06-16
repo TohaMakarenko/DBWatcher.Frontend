@@ -63,9 +63,10 @@ export class ExecuteDialogComponent implements OnInit {
 
     @Input() set script(value: number) {
         this._script = value;
-        this.scriptService.getScript(value).subscribe(x => {
-            this.parameters = x.parameters;
-        });
+        if(!!value && value > 0)
+            this.scriptService.getScript(value).subscribe(x => {
+                this.parameters = x.parameters;
+            });
     }
 
     @Input() set connection(value: number) {
@@ -144,7 +145,7 @@ export class ExecuteDialogComponent implements OnInit {
             label: c.name,
             icon: 'pi pi-fw pi-file'
         }));
-        if (this.script > 0 && scripts[0]) {
+        if (!this.script && !!scripts[0]) {
             this.script = scripts[0].id;
         }
     }

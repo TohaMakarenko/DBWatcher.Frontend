@@ -34,11 +34,7 @@ export class ScriptDetailsComponent implements OnInit {
         private scriptService: ScriptService,
         private foldersService: FoldersService,
         private confirmationService: ConfirmationService) {
-        this.foldersSubscription = this.foldersService.getSubject().subscribe(this.updateSelectItems.bind(this));
-        this.typesSelect = Object.keys(DbType).filter(x => isNaN(Number(x)) === false).map(x => ({
-            value: x,
-            label: DbType[x]
-        }))
+
     }
 
     ngOnInit() {
@@ -50,7 +46,16 @@ export class ScriptDetailsComponent implements OnInit {
                 let id = +params.get('id');
                 this.getScript(id);
             }
+            this.initData();
         });
+    }
+
+    private initData(){
+        this.foldersSubscription = this.foldersService.getSubject().subscribe(this.updateSelectItems.bind(this));
+        this.typesSelect = Object.keys(DbType).filter(x => isNaN(Number(x)) === false).map(x => ({
+            value: parseInt(x),
+            label: DbType[x]
+        }));
         this.loadFolders();
     }
 

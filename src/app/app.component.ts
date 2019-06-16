@@ -7,6 +7,8 @@ import {FoldersService} from "./Services/folders.service";
 import {MenuItem} from "primeng/api";
 import {ConnectionService} from "./Services/connection.service";
 import {Connection} from "./Models/connection";
+import {JobService} from "./Services/job.service";
+import {Job} from "./Models/job";
 
 @Component({
     selector: 'app-root',
@@ -20,12 +22,15 @@ export class AppComponent {
     newFolderName: string;
     scriptsSubscription: Subscription;
     connectionsSubscription: Subscription;
+    JobsSubscription: Subscription;
 
     constructor(private breakpointObserver: BreakpointObserver,
                 private foldersService: FoldersService,
-                private connectionsService: ConnectionService) {
+                private connectionsService: ConnectionService,
+                private JobsService: JobService) {
         this.scriptsSubscription = this.foldersService.getSubject().subscribe(this.updateScriptsMenuItems.bind(this));
         this.connectionsSubscription = this.connectionsService.getSubject().subscribe(this.updateConnectionsMenuItems.bind(this));
+        this.JobsSubscription = this.JobsService.getSubject().subscribe(this.updateJobMenuItems.bind(this));
     }
 
     ngOnInit() {
@@ -35,12 +40,15 @@ export class AppComponent {
     async loadData() {
         this.foldersService.loadFolders();
         this.connectionsService.loadConnections();
+        this.JobsService.loadJobs();
     };
 
-    updateConnectionsMenuItems(folders: Connection[]) {
+    // region connections
+
+    updateConnectionsMenuItems(connections: Connection[]) {
         this.menuItems[0] = {
             label: "Connections",
-            items: folders.map(x => this.mapConnectionToNavElement(x)).concat([this.getNewConnectionMenuItem()]),
+            items: connections.map(x => this.mapConnectionToNavElement(x)).concat([this.getNewConnectionMenuItem()]),
             expanded: true
         };
     }
@@ -60,6 +68,11 @@ export class AppComponent {
             icon: "pi pi-fw pi-plus"
         }
     }
+
+    //endregion
+
+
+    // region scripts
 
     updateScriptsMenuItems(folders: Folder[]) {
         this.menuItems[1] = {
@@ -118,6 +131,36 @@ export class AppComponent {
         });
         this.displayNewFolderDialog = false;
     }
+
+    //endregion
+
+    // region jobs
+
+    updateJobMenuItems(jobs: Job[]) {
+        this.menuItems[2] = {
+            label: "Jobs",
+            items: jobs.map(x => this.mapJobToNavElement(x)).concat([this.getNewJobMenuItem()]),
+            expanded: true
+        };
+    }
+
+    mapJobToNavElement(job: Job): MenuItem {
+        return {
+            label: job.name,
+            routerLink: ["jobs", job.id],
+            icon: "pi pi-fw pi-angle-double-right"
+        }
+    }
+
+    getNewJobMenuItem(): MenuItem {
+        return {
+            label: "New job",
+            routerLink: ["jobs", "new"],
+            icon: "pi pi-fw pi-plus"
+        }
+    }
+
+    //endregion
 
     ngOnDestroy() {
         this.scriptsSubscription.unsubscribe();

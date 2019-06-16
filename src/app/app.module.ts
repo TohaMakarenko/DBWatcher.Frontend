@@ -13,7 +13,7 @@ import {MonacoEditorModule} from 'ngx-monaco-editor';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {
     AccordionModule,
-    ButtonModule,
+    ButtonModule, CalendarModule, CheckboxModule,
     DialogModule,
     GrowlModule,
     InputTextareaModule,
@@ -33,6 +33,9 @@ import { ConnectionDetailsComponent } from './Components/Connections/connection-
 import { ExecuteDialogComponent } from './Components/Execution/execute-dialog/execute-dialog.component';
 import {TableModule} from "primeng/table";
 import { ResultComponent } from './Components/Execution/result/result.component';
+import { JobDetailsComponent } from './Components/Jobs/job-details/job-details.component';
+import { ParametersComponent } from './Components/Execution/parameters/parameters.component';
+import { LogDetailsComponent } from './Components/Jobs/log-details/log-details.component';
 
 //region primeng
 
@@ -46,6 +49,9 @@ import { ResultComponent } from './Components/Execution/result/result.component'
         ConnectionDetailsComponent,
         ExecuteDialogComponent,
         ResultComponent,
+        JobDetailsComponent,
+        ParametersComponent,
+        LogDetailsComponent,
     ],
     imports: [
         //region primeng
@@ -79,7 +85,9 @@ import { ResultComponent } from './Components/Execution/result/result.component'
         MonacoEditorModule.forRoot(),
         FormsModule,
         TableModule,
-        ProgressBarModule
+        ProgressBarModule,
+        CalendarModule,
+        CheckboxModule
     ],
     providers: [],
     bootstrap: [AppComponent]

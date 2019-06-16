@@ -34,6 +34,7 @@ export class ApiService {
         const url = `${environment.server_url}${path}`;
         return this.http.put<T>(url, body, AppSettings.httpOptions)
             .pipe(
+                map(this.extractData),
                 catchError(this.handleError),
                 share()
             );

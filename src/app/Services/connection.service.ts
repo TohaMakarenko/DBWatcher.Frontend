@@ -50,7 +50,7 @@ export class ConnectionService {
         }
         observable.subscribe(script => {
             let index = this.connections.findIndex(s => s.id == script.id);
-            if (index > 0)
+            if (index >= 0)
                 this.connections[index] = script;
             else
                 this.connections.push(script);

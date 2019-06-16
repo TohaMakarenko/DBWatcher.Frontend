@@ -1,0 +1,126 @@
+<div class="page-header ui-g">
+    <div class="ui-sm-6 ui-md-6 ui-lg-6">
+        <label for="connection-name" class="label">Job</label>
+        <input id="connection-name" pInputText placeholder="Name" [(ngModel)]="job.name" required>
+    </div>
+
+    <div class="buttons-right ui-sm-12 ui-md-6 ui-lg-6">
+        <!--<mat-progress-spinner
+            id="load-spinner"
+            color="primary"
+            mode="indeterminate"
+            diameter="20">
+        </mat-progress-spinner>-->
+        <button pButton label="Save" icon="pi pi-save" class="ui-button-secondary" (click)="onSave()"></button>
+        <button pButton *ngIf="!job.isActive" label="Start" icon="pi pi-caret-right" class="ui-button-secondary" (click)="onStart()"></button>
+        <button pButton *ngIf="job.isActive" label="Stop" icon="pi pi-minus-circle" class="ui-button-secondary" (click)="onStop()"></button>
+        <button pButton label="Delete" icon="pi pi-trash" class="ui-button-secondary" (click)="onDelete()"></button>
+    </div>
+</div>
+<div class="page-content">
+    <div class="ui-g">
+        <div class="ui-g-4">
+            <label class="label">Connection</label>
+            <p-dropdown [options]="connectionsSelect" [(ngModel)]="connection"></p-dropdown>
+        </div>
+        <div class="ui-g-4">
+            <label class="label">Databases</label>
+            <p-dropdown [options]="databasesSelect" [(ngModel)]="database"></p-dropdown>
+        </div>
+        <div class="ui-g-4">
+            <label class="label">Script</label>
+            <p-dropdown [options]="scriptsSelect" [(ngModel)]="script"></p-dropdown>
+        </div>
+    </div>
+
+    <div class="ui-g">
+        <h4 class="label label-top">Parameters </h4>
+        <p-table [value]="parameters">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Value</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData>
+                <tr>
+                    <td>
+                        {{rowData.name}}
+                    </td>
+                    <td>
+                        {{getDbType(rowData.type)}}
+                    </td>
+                    <td pEditableColumn>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input type="text" [(ngModel)]="rowData.value">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{rowData.value}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+
+    <div class="ui-g">
+        <div class="ui-g-4">
+            <label class="label label-top">Type</label>
+            <p-dropdown [styleClass]="'control'" [options]="typesSelect" [(ngModel)]="type"></p-dropdown>
+        </div>
+    </div>
+
+    <div class="ui-g" *ngIf="type==JobType.Simple">
+        <div class="ui-g-4">
+            <p-checkbox name="IsRepeatable" binary="true" label="Is repeatable" [(ngModel)]="job.isRepeatable"></p-checkbox>
+        </div>
+    </div>
+    <div class="ui-g">
+        <div *ngIf="type==JobType.Simple && job.isRepeatable" class="ui-g-4">
+            <label class="label label-top">Interval</label>
+            <p-calendar [style]="{width:'100%'}" [inputStyleClass]="'control'" [(ngModel)]="job.interval" [timeOnly]="true" [showSeconds]="true">
+            </p-calendar>
+        </div>
+        <div *ngIf="type==JobType.Cron" class="ui-g-4">
+            <label class="label label-top">Cron</label>
+            <input class="control" pInputText placeholder="Cron" [(ngModel)]="job.cron" required>
+        </div>
+    </div>
+
+    <div class="ui-g">
+        <div class="ui-g-4">
+            <label class="label label-top">Start at</label>
+            <p-calendar [style]="{width:'100%'}" [inputStyleClass]="'control'" [(ngModel)]="startAt" [showTime]="true"></p-calendar>
+        </div>
+    </div>
+
+    <div class="ui-g">
+        <h4 class="label label-top">Log </h4>
+        <p-table [value]="logs">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Start time</th>
+                    <th>Finish time</th>
+                    <th>Result</th>
+                    <th></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData>
+                <tr>
+                    <td>{{rowData.startTime}}</td>
+                    <td>{{rowData.finishTime}}</td>
+                    <td>{{rowData.result.isSuccess ? "Success" : "Error"}}</td>
+                    <td>
+                        <button pButton label="Details" class="ui-button-secondary" (click)="showLogDetails(rowData)"></button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<p-confirmDialog></p-confirmDialog>
+<app-log-details [(display)]="displayLogDetails" [log]="selectedLog" *ngIf="selectedLog"></app-log-details>
