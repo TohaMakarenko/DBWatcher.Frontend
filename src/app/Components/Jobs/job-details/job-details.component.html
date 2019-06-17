@@ -12,28 +12,29 @@
             diameter="20">
         </mat-progress-spinner>-->
         <button pButton label="Save" icon="pi pi-save" class="ui-button-secondary" (click)="onSave()"></button>
-        <button pButton *ngIf="!job.isActive" label="Start" icon="pi pi-caret-right" class="ui-button-secondary" (click)="onStart()"></button>
+        <button pButton *ngIf="!job.isActive" label="Start" icon="pi pi-caret-right" class="ui-button-secondary" (click)="onStart()"
+                [disabled]="!job.executionContexts.length"></button>
         <button pButton *ngIf="job.isActive" label="Stop" icon="pi pi-minus-circle" class="ui-button-secondary" (click)="onStop()"></button>
         <button pButton label="Delete" icon="pi pi-trash" class="ui-button-secondary" (click)="onDelete()"></button>
     </div>
 </div>
 <div class="page-content">
     <div class="ui-g">
-        <div class="ui-g-4">
+        <!--<div class="ui-g-4">
             <label class="label">Connection</label>
             <p-dropdown [options]="connectionsSelect" [(ngModel)]="connection"></p-dropdown>
         </div>
         <div class="ui-g-4">
             <label class="label">Databases</label>
             <p-dropdown [options]="databasesSelect" [(ngModel)]="database"></p-dropdown>
-        </div>
+        </div>-->
         <div class="ui-g-4">
             <label class="label">Script</label>
             <p-dropdown [options]="scriptsSelect" [(ngModel)]="script"></p-dropdown>
         </div>
     </div>
 
-    <div class="ui-g">
+    <div class="ui-g" *ngIf="parameters.length">
         <h4 class="label label-top">Parameters </h4>
         <p-table [value]="parameters">
             <ng-template pTemplate="header">
@@ -97,6 +98,45 @@
         </div>
     </div>
 
+    <label class="label label-top">Connections </label> <br>
+    <p-table [value]="job.executionContexts">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Connection</th>
+                <th>Database</th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData>
+            <tr>
+                <td pEditableColumn>
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <p-dropdown [options]="connectionsSelect" [(ngModel)]="rowData.connectionId"
+                                        (onChange)="getDatabaseSelectItems(rowData)"></p-dropdown>
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{getConnectionName(rowData.connectionId)}}
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+                <td pEditableColumn>
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <p-dropdown [options]="rowData.databases" [(ngModel)]="rowData.database"></p-dropdown>
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{rowData.database}}
+                        </ng-template>
+                    </p-cellEditor>
+                <td>
+                    <button pButton label="Remove" icon="pi pi-times" class="ui-button-secondary" (click)="onRemoveConnection(rowData)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <button pButton label="Add connection" icon="pi pi-plus" class="ui-button-secondary" (click)="onAddConnection()"></button>
+
     <div class="ui-g">
         <h4 class="label label-top">Log </h4>
         <p-table [value]="logs">
@@ -104,14 +144,16 @@
                 <tr>
                     <th>Start time</th>
                     <th>Finish time</th>
+                    <th>Connection</th>
                     <th>Result</th>
                     <th></th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-rowData>
                 <tr>
-                    <td>{{rowData.startTime}}</td>
-                    <td>{{rowData.finishTime}}</td>
+                    <td>{{formatLogTime(rowData.startTime)}}</td>
+                    <td>{{formatLogTime(rowData.finishTime)}}</td>
+                    <td>{{getConnectionName(rowData.context.connectionId)}} : {{rowData.context.database}}</td>
                     <td>{{rowData.result.isSuccess ? "Success" : "Error"}}</td>
                     <td>
                         <button pButton label="Details" class="ui-button-secondary" (click)="showLogDetails(rowData)"></button>

@@ -6,7 +6,7 @@ export interface Job {
     name: string;
     scriptId: number;
     connectionId: number;
-    executionContext: JobExecutionContext;
+    executionContexts: JobExecutionContext[];
     parameters: Parameter[];
     type: number;
     cron: string;

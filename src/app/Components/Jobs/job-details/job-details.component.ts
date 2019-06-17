@@ -27,8 +27,6 @@ export class JobDetailsComponent implements OnInit {
 
     // region properties
     private _script: number;
-    private _connection: number;
-    private _database: string;
     private _type: number;
     private _startAt: Date;
     private _parameters: Parameter[];
@@ -40,14 +38,6 @@ export class JobDetailsComponent implements OnInit {
 
     get script(): number {
         return this._script;
-    }
-
-    get connection(): number {
-        return this._connection;
-    }
-
-    get database(): string {
-        return this._database;
     }
 
     get type(): number {
@@ -71,19 +61,6 @@ export class JobDetailsComponent implements OnInit {
             });
     }
 
-    @Input() set connection(value: number) {
-        this._connection = value;
-        this.databasesSelect = [];
-        this.job.connectionId = value;
-        if (value > 0)
-            this.databaseService.getDatabases(value).subscribe(this.updateDatabaseSelectItems.bind(this));
-    }
-
-    @Input() set database(value: string) {
-        this._database = value;
-        this.job.executionContext.database = value;
-    }
-
     @Input() set parameters(value: Parameter[]) {
         this._parameters = value;
         this.job.parameters = value;
@@ -101,6 +78,7 @@ export class JobDetailsComponent implements OnInit {
 
     private scriptsSelect: SelectItem[];
     private connectionsSelect: SelectItem[];
+    private connections: Connection[];
     private databasesSelect: SelectItem[];
     private scriptsSubscription: Subscription;
     private connectionsSubscription: Subscription;
@@ -114,8 +92,6 @@ export class JobDetailsComponent implements OnInit {
 
     private setJob(value: Job) {
         this.job = value;
-        this.connection = value.connectionId;
-        this.database = value.executionContext.database;
         this.type = value.type;
         this.script = value.scriptId;
         this.parameters = value.parameters;
@@ -146,7 +122,7 @@ export class JobDetailsComponent implements OnInit {
         });
     }
 
-    private initData(){
+    private initData() {
         this.typesSelect = Object.keys(JobType).filter(x => isNaN(Number(x)) === false).map(x => ({
             value: parseInt(x),
             label: JobType[x]
@@ -215,14 +191,12 @@ export class JobDetailsComponent implements OnInit {
     }
 
     updateConnectionSelectItems(connections: Connection[]) {
+        this.connections = connections;
         this.connectionsSelect = connections.map(c => ({
             value: c.id,
             label: c.name,
             icon: 'pi pi-fw pi-key'
         }));
-        if (!!connections[0]) {
-            this.connection = connections[0].id;
-        }
     }
 
     updateScriptSelectItems(scripts: Script[]) {
@@ -236,14 +210,28 @@ export class JobDetailsComponent implements OnInit {
         }
     }
 
-    updateDatabaseSelectItems(databases: string[]) {
-        this.databasesSelect = databases.map(c => ({
+    async getDatabaseSelectItems(rowData: any) {
+        let databases = await this.databaseService.getDatabases(rowData.connectionId).toPromise();
+        rowData.database = databases[0];
+        rowData.databases = databases.map(c => ({
             value: c,
             label: c,
             icon: 'pi pi-fw pi-list'
         }));
-        if(!!databases[0])
-            this.database = databases[0];
+    }
+
+    onAddConnection() {
+        let conn = {connectionId: 0, database: ""};
+        if(this.connectionsSelect[0]){
+            conn.connectionId = +this.connectionsSelect[0].value;
+            this.getDatabaseSelectItems(conn);
+        }
+        this.job.executionContexts.push(conn);
+    }
+
+    onRemoveConnection(rowData) {
+        this.job.executionContexts = this.job.executionContexts
+            .filter(x => x.connectionId != rowData.connectionId || x.database != rowData.database);
     }
 
     private getNewJob(): Job {
@@ -251,7 +239,7 @@ export class JobDetailsComponent implements OnInit {
             id: -1,
             connectionId: 0,
             cron: "",
-            executionContext: {database: ""},
+            executionContexts: [],
             interval: "00:00:05",
             isActive: false,
             isRepeatable: false,
@@ -264,10 +252,19 @@ export class JobDetailsComponent implements OnInit {
     }
 
     private async loadLogs() {
-        if(!this.job)
+        if (!this.job)
             this.logs = [];
         else
             this.logs = await this.jobService.getLogs(this.job.id).toPromise();
+    }
+
+    public getConnectionName(id: number) {
+        let connection = this.connectionsSelect.find(x => x.value == id);
+        return connection.label;
+    }
+
+    public formatLogTime(time: string): string{
+        return moment(time).format("DD.MM.YYYY HH:mm:ss");
     }
 
     showLogDetails(log: JobLog) {
