@@ -144,6 +144,10 @@ export class DashboardComponent implements OnInit {
         this._selectedChart = chart;
     }
 
+    onDeleteChart(chart: ChartSettings) {
+        this.dashboard.charts = this.dashboard.charts.filter(x => x != chart);
+    }
+
     loadData() {
         this.dashboard.charts.forEach(chart => {
             this.jobService.searchLogs({connectionId: this.connection, database: this.database, jobId: chart.jobId, skip: 0, take: chart.logLimit})
@@ -166,7 +170,7 @@ export class DashboardComponent implements OnInit {
 
     getSeriesBackgroundColor(series: SeriesSettings) {
         let alpha = 'FF';
-        if(["line", "radar"])
+        if (["line", "radar"])
             alpha = '4D';
         return series.color && (series.color + alpha);
 

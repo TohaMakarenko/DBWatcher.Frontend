@@ -28,6 +28,7 @@
         <div class="ui-xl-6 chart-container" *ngFor="let chart of dashboard.charts">
             <div class="chart-header">
                 <span>{{chart.name}}</span>
+                <button pButton icon="pi pi-times" class="ui-button-secondary" style="float: right" (click)="onDeleteChart(chart)"></button>
                 <button pButton icon="pi pi-cog" class="ui-button-secondary" style="float: right" (click)="onConfigChart(chart)"></button>
             </div>
             <div>
