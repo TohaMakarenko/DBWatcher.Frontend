@@ -1,0 +1,42 @@
+<div class="page-header ui-g">
+    <div class="ui-sm-6 ui-md-6 ui-lg-6">
+        <label for="connection-name" class="label">Dashboard</label>
+        <input id="connection-name" pInputText placeholder="Name" [(ngModel)]="dashboard.name" required>
+    </div>
+
+    <div class="buttons-right ui-sm-12 ui-md-6 ui-lg-6">
+        <button pButton label="Save" icon="pi pi-save" class="ui-button-secondary" (click)="onSave()"></button>
+        <button pButton label="Delete" icon="pi pi-trash" class="ui-button-secondary" (click)="onDelete()"></button>
+    </div>
+</div>
+<div class="page-content">
+    <div class="ui-g">
+        <div class="ui-g-4">
+            <label class="label">Connection</label>
+            <p-dropdown [style]="{zIndex: 9999}" [options]="connectionsSelect" [(ngModel)]="connection"></p-dropdown>
+        </div>
+        <div class="ui-g-4">
+            <label class="label">Databases</label>
+            <p-dropdown [style]="{zIndex: 9999}" [options]="databasesSelect" [(ngModel)]="database"></p-dropdown>
+        </div>
+        <div class="ui-g-4">
+            <button pButton label="Load data" icon="pi pi-replay" class="ui-button-secondary" (click)="loadData()"
+                    [disabled]="!connection || !database"></button>
+        </div>
+    </div>
+    <div class="ui-g">
+        <div class="ui-xl-6 chart-container" *ngFor="let chart of dashboard.charts">
+            <div class="chart-header">
+                <span>{{chart.name}}</span>
+                <button pButton icon="pi pi-cog" class="ui-button-secondary" style="float: right" (click)="onConfigChart(chart)"></button>
+            </div>
+            <div>
+                <p-chart height="400px" [type]="chart.type" [data]="chart.data || {}"></p-chart>
+            </div>
+        </div>
+        <button pButton label="New chart" class="ui-button-secondary ui-xl-6 chart-container" (click)="onNewChart()"></button>
+    </div>
+</div>
+
+<p-confirmDialog></p-confirmDialog>
+<app-chart-settings [(display)]="displayChartSettings" [(chart)]="selectedChart"></app-chart-settings>

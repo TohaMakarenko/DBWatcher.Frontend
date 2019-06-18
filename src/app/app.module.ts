@@ -13,9 +13,9 @@ import {MonacoEditorModule} from 'ngx-monaco-editor';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {
     AccordionModule,
-    ButtonModule, CalendarModule, CheckboxModule,
+    ButtonModule, CalendarModule, ChartModule, CheckboxModule, ColorPickerModule,
     DialogModule,
-    GrowlModule,
+    GrowlModule, InputMaskModule,
     InputTextareaModule,
     InputTextModule,
     PanelModule, ProgressBarModule,
@@ -36,6 +36,8 @@ import { ResultComponent } from './Components/Execution/result/result.component'
 import { JobDetailsComponent } from './Components/Jobs/job-details/job-details.component';
 import { ParametersComponent } from './Components/Execution/parameters/parameters.component';
 import { LogDetailsComponent } from './Components/Jobs/log-details/log-details.component';
+import { DashboardComponent } from './Components/Dashboards/dashboard/dashboard.component';
+import { ChartSettingsComponent } from './Components/Dashboards/chart-settings/chart-settings.component';
 
 //region primeng
 
@@ -52,6 +54,8 @@ import { LogDetailsComponent } from './Components/Jobs/log-details/log-details.c
         JobDetailsComponent,
         ParametersComponent,
         LogDetailsComponent,
+        DashboardComponent,
+        ChartSettingsComponent,
     ],
     imports: [
         //region primeng
@@ -87,7 +91,10 @@ import { LogDetailsComponent } from './Components/Jobs/log-details/log-details.c
         TableModule,
         ProgressBarModule,
         CalendarModule,
-        CheckboxModule
+        CheckboxModule,
+        InputMaskModule,
+        ChartModule,
+        ColorPickerModule
     ],
     providers: [],
     bootstrap: [AppComponent]

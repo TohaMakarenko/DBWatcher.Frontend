@@ -283,6 +283,6 @@ export class JobDetailsComponent implements OnInit {
     ngOnDestroy() {
         this.connectionsSubscription.unsubscribe();
         this.scriptsSubscription.unsubscribe();
-        this.intervalSubscription.unsubscribe();
+        this.intervalSubscription && this.intervalSubscription.unsubscribe();
     }
 }

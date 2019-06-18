@@ -1,0 +1,76 @@
+<p-dialog header="Chart details"
+          [(visible)]="display"
+          [modal]="true"
+          [responsive]="true"
+          [style]="{width: '1000px', minWidth: '300px'}"
+          [maximizable]="true"
+          [baseZIndex]="10000">
+    <div class="ui-g" style="height: 600px; display: block;">
+        <div class="ui-g">
+            <div class="ui-g-4">
+                <label class="label label-top">Name</label>
+                <input type="text" pInputText [(ngModel)]="chart.name"/>
+            </div>
+            <div class="ui-g-4">
+                <label class="label label-top">Type</label>
+                <p-dropdown [options]="chartTypesSelect" [(ngModel)]="chart.type"></p-dropdown>
+            </div>
+            <div class="ui-g-4">
+                <label class="label label-top">Job</label>
+                <p-dropdown [options]="jobsSelect" [(ngModel)]="jobId" (onChange)="loadColumns()"></p-dropdown>
+            </div>
+            <div class="ui-g-4">
+                <label class="label label-top">Log limit</label>
+                <input type="number" pInputText [(ngModel)]="chart.logLimit"/>
+            </div>
+        </div>
+
+        <h4 class="label label-top">Series </h4>
+        <p-table [value]="chart.series">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Label</th>
+                    <th>Column</th>
+                    <th>Color</th>
+                    <th></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData>
+                <tr>
+                    <td pEditableColumn>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input type="text" [(ngModel)]="rowData.label">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{rowData.label}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td pEditableColumn>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-dropdown [style]="{width: '100%'}" [options]="columns" [(ngModel)]="rowData.column"
+                                            editable="true" placeholder="Select a column"></p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{rowData.column}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td style="text-align: center">
+                        <p-colorPicker [(ngModel)]="rowData.color"></p-colorPicker>
+                    </td>
+                    <td>
+                        <button pButton label="Remove" icon="pi pi-times" class="ui-button-secondary" (click)="onRemoveSeries(rowData)"></button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        <button pButton label="Add series" icon="pi pi-plus" class="ui-button-secondary" (click)="onAddSeries()"></button>
+    </div>
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" (click)="onOkClick()" label="Save"></button>
+        <button type="button" pButton icon="pi pi-close" (click)="onCancelClick()" label="Cancel" class="ui-button-secondary"></button>
+    </p-footer>
+</p-dialog>

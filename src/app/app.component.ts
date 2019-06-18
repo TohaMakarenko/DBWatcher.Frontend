@@ -9,6 +9,7 @@ import {ConnectionService} from "./Services/connection.service";
 import {Connection} from "./Models/connection";
 import {JobService} from "./Services/job.service";
 import {Job} from "./Models/job";
+import {DashboardService} from "./Services/dashboard.service";
 
 @Component({
     selector: 'app-root',
@@ -22,15 +23,18 @@ export class AppComponent {
     newFolderName: string;
     scriptsSubscription: Subscription;
     connectionsSubscription: Subscription;
-    JobsSubscription: Subscription;
+    jobsSubscription: Subscription;
+    dashboardSubscription: Subscription;
 
     constructor(private breakpointObserver: BreakpointObserver,
                 private foldersService: FoldersService,
                 private connectionsService: ConnectionService,
-                private JobsService: JobService) {
+                private jobsService: JobService,
+                private dashboardService: DashboardService) {
         this.scriptsSubscription = this.foldersService.getSubject().subscribe(this.updateScriptsMenuItems.bind(this));
         this.connectionsSubscription = this.connectionsService.getSubject().subscribe(this.updateConnectionsMenuItems.bind(this));
-        this.JobsSubscription = this.JobsService.getSubject().subscribe(this.updateJobMenuItems.bind(this));
+        this.jobsSubscription = this.jobsService.getSubject().subscribe(this.updateJobMenuItems.bind(this));
+        this.dashboardSubscription = this.dashboardService.getSubject().subscribe(this.updateDashboardMenuItems.bind(this));
     }
 
     ngOnInit() {
@@ -40,7 +44,8 @@ export class AppComponent {
     async loadData() {
         this.foldersService.loadFolders();
         this.connectionsService.loadConnections();
-        this.JobsService.loadJobs();
+        this.jobsService.loadJobs();
+        this.dashboardService.loadDashboars();
     };
 
     // region connections
@@ -156,6 +161,34 @@ export class AppComponent {
         return {
             label: "New job",
             routerLink: ["jobs", "new"],
+            icon: "pi pi-fw pi-plus"
+        }
+    }
+
+    //endregion
+
+    // region dashboards
+
+    updateDashboardMenuItems(jobs: Job[]) {
+        this.menuItems[3] = {
+            label: "Dashboards",
+            items: jobs.map(x => this.mapDashboardToNavElement(x)).concat([this.getNewDashboardMenuItem()]),
+            expanded: true
+        };
+    }
+
+    mapDashboardToNavElement(job: Job): MenuItem {
+        return {
+            label: job.name,
+            routerLink: ["dashboards", job.id],
+            icon: "pi pi-fw pi-chart-bar"
+        }
+    }
+
+    getNewDashboardMenuItem(): MenuItem {
+        return {
+            label: "New dashboard",
+            routerLink: ["dashboards", "new"],
             icon: "pi pi-fw pi-plus"
         }
     }

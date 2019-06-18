@@ -5,6 +5,7 @@ import {ScriptDetailsComponent} from "./Components/Scripts/script-details/script
 import {ScriptsListComponent} from "./Components/Scripts/scripts-list/scripts-list.component";
 import {ConnectionDetailsComponent} from "./Components/Connections/connection-details/connection-details.component";
 import {JobDetailsComponent} from "./Components/Jobs/job-details/job-details.component";
+import {DashboardComponent} from "./Components/Dashboards/dashboard/dashboard.component";
 
 const routes: Routes = [
     {path: '', redirectTo: '/scripts', pathMatch: 'full'},
@@ -15,6 +16,8 @@ const routes: Routes = [
     {path: 'connections/new', component: ConnectionDetailsComponent},
     {path: 'jobs/:id', component: JobDetailsComponent},
     {path: 'jobs/new', component: JobDetailsComponent},
+    {path: 'dashboards/:id', component: DashboardComponent},
+    {path: 'dashboards/new', component: DashboardComponent},
 ];
 
 @NgModule({

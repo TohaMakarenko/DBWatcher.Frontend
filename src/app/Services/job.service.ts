@@ -3,6 +3,7 @@ import {BehaviorSubject, Observable, Subject} from "rxjs";
 import {Job} from "../Models/job";
 import {ApiService} from "./api.service";
 import {JobLog} from "../Models/job-log";
+import {JobLogSearchFilter} from "../Models/job-log-search-filter";
 
 @Injectable({
     providedIn: 'root'
@@ -82,8 +83,13 @@ export class JobService {
             this.updateSubject();
         });
     }
-    public getLogs(jobId: number) : Observable<JobLog[]> {
-        return this.http.get<JobLog[]>(`${this.controllerUrl}/${jobId}/log`);
+
+    public getLogs(jobId: number, skip: number = 0, take: number = 100): Observable<JobLog[]> {
+        return this.http.get<JobLog[]>(`${this.controllerUrl}/${jobId}/log/${skip}/${take}`);
+    }
+
+    public searchLogs(filter: JobLogSearchFilter): Observable<JobLog[]> {
+        return this.http.post<JobLog[]>(`${this.controllerUrl}/search`, filter);
     }
 
     updateSubject() {
