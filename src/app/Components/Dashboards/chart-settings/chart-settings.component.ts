@@ -55,6 +55,7 @@ export class ChartSettingsComponent implements OnInit {
     set jobId(value: number) {
         this._jobId = value;
         this.chart.jobId = value;
+        this.loadColumns();
     }
 
     @Output() displayChange: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -80,7 +81,7 @@ export class ChartSettingsComponent implements OnInit {
             label: x.name,
             value: x.id
         }));
-        if (jobs[0] && this.jobId <= 0) {
+        if (jobs[0] && !this.jobId) {
             this.jobId = jobs[0].id;
             this.loadColumns();
         }
